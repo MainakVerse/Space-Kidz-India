@@ -227,7 +227,7 @@ export function TimelineSection() {
               onClick={closeModal}
               className="absolute top-4 right-4 text-muted-foreground hover:text-primary transition-colors"
             >
-              <X className="w-6 h-6" />
+              
             </button>
             <div className="relative w-full h-64 mb-4 rounded-md overflow-hidden">
               <Image
