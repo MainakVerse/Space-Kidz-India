@@ -45,7 +45,9 @@ export function AboutSection() {
             </p>
             <p className="text-lg text-muted-foreground leading-relaxed">
               Our mission is to democratize access to space technology and create a generation of scientists, engineers,
-              and innovators who will shape humanity's cosmic future.
+              and innovators who will shape humanity's cosmic future. For over a decade, we've been at the forefront of
+              aerospace education, launching numerous successful satellite missions and educational programs that have
+              reached thousands of students worldwide.
             </p>
           </div>
           <div className="relative">
