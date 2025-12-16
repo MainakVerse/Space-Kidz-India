@@ -1,7 +1,7 @@
 const partners = [
   { name: "ISRO", logo: "/isro-logo.jpg" },
-  { name: "NASA", logo: "/nasa-logo.png" },
-  { name: "DRDO", logo: "/drdo-india-logo.jpg" },
+  { name: "INSPACE", logo: "/inspace-logo.jpg" },
+  { name: "SIAINDIA", logo: "/sia-india-logo.png" },
   { name: "IIT Madras", logo: "/iit-madras-logo.jpg" },
   { name: "IIST", logo: "/iist-space-institute-logo.jpg" },
   { name: "IISC Bangalore", logo: "/iisc-bangalore-logo.jpg" },
