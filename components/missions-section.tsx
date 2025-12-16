@@ -5,22 +5,22 @@ import { Card, CardContent } from "@/components/ui/card"
 
 const missions = [
   {
-    title: "Lunar Exploration Initiative",
-    year: "2024",
-    description: "Advanced lunar surface mapping and resource identification mission",
+    title: "Mission ShakthiSAT",
+    year: "2026",
+    description: "World's first all girls mission for advanced lunar surface mapping and resource identification. 12000 girls across 108+ countries are participating in this mission, led by Mission Director, Dr. Srimathy Kesan. This mission aims to inspire and empower the next generation of women in STEM fields. Mission ShakthiSAT resembles a break from traditional chains of patriarchal thinking and paves the way for feminine power in space exploration.\n\nThe mission will focus on high-resolution mapping of the lunar surface, identification of potential resources such as water ice, and studying the lunar environment to support future manned missions. By involving young girls globally, the mission seeks to foster interest in space science and technology among young women.",
     image: "/moon-surface-lunar-exploration.jpg",
   },
   {
-    title: "Student Satellite Program",
+    title: "AzaadiSAT",
     year: "2023",
-    description: "Empowering students to design, build, and launch their own satellites",
-    image: "/small-satellite-cubesat-space.jpg",
+    description: "AzaadiSAT is a 8U CubeSat launched to commemorate 75 years of India's independence. It carries 75 payloads designed and developed by 750 school across India, focusing on environmental monitoring, agricultural assessment, and disaster management. The satellite aims to provide valuable data for various applications while inspiring young minds to pursue careers in space technology and research.\n\nThe mission highlights the importance of youth involvement in space exploration and aims to foster a culture of innovation and scientific inquiry among students. AzaadiSAT represents a significant step towards democratizing access to space and encouraging educational initiatives in the field of space science.",
+    image: "/azaadisat.jpg",
   },
   {
-    title: "Climate Monitoring Constellation",
-    year: "2024",
-    description: "Earth observation system for real-time climate and environmental data",
-    image: "/earth-from-space-climate-monitoring.jpg",
+    title: "KALAMSAT",
+    year: "2017",
+    description: "World's lightest satellite built by students of Space Kidz India, rewriting history of Indian Astronomy in golden letters. KALAMSAT is world's lightest satellite, weighing just 64 grams, and was launched aboard the PSLV-C38 mission. The satellite was designed to carry a message of peace and inspiration from the students to space, embodying the vision of former President Dr. A.P.J. Abdul Kalam.\n\nKALAMSAT's mission includes educational outreach, promoting space science among young students, and demonstrating the capabilities of miniaturized satellite technology. The project showcases the potential of student-led initiatives in contributing to space exploration and serves as a beacon of hope and aspiration for future generations.",
+    image: "/kalamsat.jpg",
   },
 ]
 
@@ -86,7 +86,16 @@ export function MissionsSection() {
                   </div>
                   <CardContent className="p-8 md:p-12 flex flex-col justify-center">
                     <h3 className="text-3xl font-bold text-card-foreground mb-4 text-balance">{mission.title}</h3>
-                    <p className="text-lg text-muted-foreground leading-relaxed">{mission.description}</p>
+                    <div className="space-y-4">
+  {mission.description.split("\n\n").map((para, i) => (
+    <p
+      key={i}
+      className="text-lg text-muted-foreground leading-relaxed"
+    >
+      {para}
+    </p>
+  ))}
+</div>
                   </CardContent>
                 </div>
               </Card>
