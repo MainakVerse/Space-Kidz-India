@@ -2,11 +2,11 @@ const partners = [
   { name: "ISRO", logo: "/isro-logo.jpg" },
   { name: "INSPACE", logo: "/inspace-logo.jpg" },
   { name: "SIAINDIA", logo: "/sia-india-logo.png" },
-  { name: "IIT Madras", logo: "/iit-madras-logo.jpg" },
-  { name: "IIST", logo: "/iist-space-institute-logo.jpg" },
-  { name: "IISC Bangalore", logo: "/iisc-bangalore-logo.jpg" },
-  { name: "Antrix Corporation", logo: "/antrix-corporation-logo.jpg" },
-  { name: "NewSpace India", logo: "/newspace-india-limited-logo.jpg" },
+  { name: "Alpha", logo: "/alpha-impulsion-logo.jpg" },
+  { name: "ZohoLearn", logo: "/zoho-learn-logo.jpg" },
+  { name: "Atmanirbhar", logo: "/atmanirbhar-bharat-logo.jpg" },
+  { name: "WAN", logo: "/wan-logo.jpg" },
+  { name: "STEM Queens", logo: "/stem-queens-logo.jpg" },
 ]
 
 export function PartnersSection() {
