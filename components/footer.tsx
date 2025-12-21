@@ -38,11 +38,7 @@ export function Footer() {
           <div>
             <h3 className="font-semibold mb-4 text-white">Programs</h3>
             <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/space-education" className="text-white/60 hover:text-[#ff6b35] transition-colors">
-                  Space Education
-                </Link>
-              </li>
+             
               <li>
                 <Link href="/workshop" className="text-white/60 hover:text-[#ff6b35] transition-colors">
                   Workshops

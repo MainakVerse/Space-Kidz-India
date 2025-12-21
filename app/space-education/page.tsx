@@ -1,160 +1,251 @@
+"use client"
+
+import Image from "next/image"
+import { useState } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { BookOpen, Rocket, Globe, Microscope, Star, Satellite } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { useRouter } from "next/navigation"
+
+type Course = {
+  title: string
+  amount: number
+}
 
 export default function SpaceEducationPage() {
+  const router = useRouter()
+  const [open, setOpen] = useState(false)
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null)
+
+  const openModal = (course: Course) => {
+    setSelectedCourse(course)
+    setOpen(true)
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!selectedCourse) return
+
+    router.push(
+      `/payment?course=${encodeURIComponent(
+        selectedCourse.title
+      )}&amount=${selectedCourse.amount}`
+    )
+  }
+
   return (
     <div className="min-h-screen bg-black">
       <Header />
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-16 sm:pt-40 sm:pb-20 bg-gradient-to-b from-black via-black/95 to-black">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="max-w-4xl mx-auto text-center space-y-4 sm:space-y-6">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#ff6b35] text-balance">
-              Space Education
-            </h1>
-            <p className="text-lg sm:text-xl md:text-2xl text-white/80 text-balance leading-relaxed">
-              Inspiring young minds through comprehensive space science and technology programs
-            </p>
-          </div>
+      {/* Hero */}
+      <section className="pt-32 pb-20 text-center">
+        <h1 className="text-5xl font-bold text-[#ff6b35]">
+          Space Education Programs
+        </h1>
+        <p className="mt-4 text-white/80 max-w-3xl mx-auto">
+          Structured learning paths designed to nurture scientific curiosity
+          and space technology skills.
+        </p>
+      </section>
+
+      {/* Courses */}
+      <section className="pb-24">
+        <div className="container mx-auto px-4 grid gap-10 lg:grid-cols-3">
+
+          {/* Level I */}
+          <CourseCard
+            image="/little-space-scientist-level-1.jpg"
+            title="Little Space Scientist – Level I"
+            price={500}
+            meta={[
+              "Duration: 32 hrs (3–4 months)",
+              "Timings: 6:00 PM – 8:00 PM (Weekly once)",
+              "Mode: Online",
+              "Level: Intermediate",
+            ]}
+            curriculum={[
+              "History of Astronomy",
+              "Mysteries of our Universe",
+              "Our Superman Solar System",
+              "All about Stars & our only Star",
+              "Exploring our Planets",
+              "Mother Earth and her Powers",
+              "Secrets of our Moon",
+              "Light & Electromagnetic Spectrum",
+            ]}
+            onRegister={() =>
+              openModal({
+                title: "Little Space Scientist – Level I",
+                amount: 500,
+              })
+            }
+          />
+
+          {/* Level II */}
+          <CourseCard
+            image="/little-space-scientist-level-2.jpg"
+            title="Little Space Scientist – Level II"
+            price={1000}
+            meta={[
+              "Duration: 24 hrs",
+              "Timings: 6:30 PM – 8:00 PM",
+              "Mode: Online",
+              "Level: Advanced",
+            ]}
+            curriculum={[
+              "Robotics",
+              "Rovers",
+              "Aeronautics",
+              "Drones",
+              "Space Shuttles",
+              "Rockets",
+              "Satellites",
+            ]}
+            note="* Completion of Level I is mandatory before registration"
+            onRegister={() =>
+              openModal({
+                title: "Little Space Scientist – Level II",
+                amount: 1000,
+              })
+            }
+          />
+
+          {/* Astronomy for Everyone */}
+          <CourseCard
+            image="/astronomy-for-everyone.jpg"
+            title="Astronomy for Everyone"
+            price={800}
+            meta={[
+              "Age Group: 12 – 17 years",
+              "Total Duration: 3 months",
+              "No. of Classes: 25",
+              "Mode: Online & Offline",
+              "Language: English, Tamil",
+            ]}
+            curriculum={[
+              "Level 1: Introduction to Astronomy",
+              "Level 2: The Observable Universe",
+              "Level 3: The High Energy Universe",
+            ]}
+            note="For more details: +91 8122412261"
+            onRegister={() =>
+              openModal({
+                title: "Astronomy for Everyone",
+                amount: 800,
+              })
+            }
+          />
+
         </div>
       </section>
 
-      {/* Programs Section */}
-      <section className="py-12 sm:py-20 bg-black">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#ff6b35] text-center mb-10 sm:mb-16">
-              Our Education Programs
-            </h2>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-              <div className="bg-white/5 backdrop-blur-sm p-6 sm:p-8 rounded-xl border border-white/10 hover:border-[#ff6b35]/50 transition-all hover:shadow-xl hover:shadow-[#ff6b35]/10">
-                <BookOpen className="w-10 h-10 sm:w-12 sm:h-12 text-[#ff6b35] mb-4" />
-                <h3 className="text-xl sm:text-2xl font-bold text-white mb-3">Curriculum Design</h3>
-                <p className="text-sm sm:text-base text-white/70 leading-relaxed mb-4">
-                  Age-appropriate space science curriculum integrated with national educational standards
-                </p>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="border-[#ff6b35] text-[#ff6b35] hover:bg-[#ff6b35] hover:text-white w-full bg-transparent"
-                >
-                  Learn More
-                </Button>
-              </div>
-              <div className="bg-white/5 backdrop-blur-sm p-6 sm:p-8 rounded-xl border border-white/10 hover:border-[#ff6b35]/50 transition-all hover:shadow-xl hover:shadow-[#ff6b35]/10">
-                <Rocket className="w-10 h-10 sm:w-12 sm:h-12 text-[#ff6b35] mb-4" />
-                <h3 className="text-xl sm:text-2xl font-bold text-white mb-3">Practical Training</h3>
-                <p className="text-sm sm:text-base text-white/70 leading-relaxed mb-4">
-                  Hands-on experience with rocket building, satellite design, and space mission planning
-                </p>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="border-[#ff6b35] text-[#ff6b35] hover:bg-[#ff6b35] hover:text-white w-full bg-transparent"
-                >
-                  Learn More
-                </Button>
-              </div>
-              <div className="bg-white/5 backdrop-blur-sm p-6 sm:p-8 rounded-xl border border-white/10 hover:border-[#ff6b35]/50 transition-all hover:shadow-xl hover:shadow-[#ff6b35]/10">
-                <Globe className="w-10 h-10 sm:w-12 sm:h-12 text-[#ff6b35] mb-4" />
-                <h3 className="text-xl sm:text-2xl font-bold text-white mb-3">Online Courses</h3>
-                <p className="text-sm sm:text-base text-white/70 leading-relaxed mb-4">
-                  Interactive digital learning modules accessible from anywhere in the world
-                </p>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="border-[#ff6b35] text-[#ff6b35] hover:bg-[#ff6b35] hover:text-white w-full bg-transparent"
-                >
-                  Learn More
-                </Button>
-              </div>
-              <div className="bg-white/5 backdrop-blur-sm p-6 sm:p-8 rounded-xl border border-white/10 hover:border-[#ff6b35]/50 transition-all hover:shadow-xl hover:shadow-[#ff6b35]/10">
-                <Microscope className="w-10 h-10 sm:w-12 sm:h-12 text-[#ff6b35] mb-4" />
-                <h3 className="text-xl sm:text-2xl font-bold text-white mb-3">Research Projects</h3>
-                <p className="text-sm sm:text-base text-white/70 leading-relaxed mb-4">
-                  Student-led research initiatives in space science and aerospace engineering
-                </p>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="border-[#ff6b35] text-[#ff6b35] hover:bg-[#ff6b35] hover:text-white w-full bg-transparent"
-                >
-                  Learn More
-                </Button>
-              </div>
-              <div className="bg-white/5 backdrop-blur-sm p-6 sm:p-8 rounded-xl border border-white/10 hover:border-[#ff6b35]/50 transition-all hover:shadow-xl hover:shadow-[#ff6b35]/10">
-                <Star className="w-10 h-10 sm:w-12 sm:h-12 text-[#ff6b35] mb-4" />
-                <h3 className="text-xl sm:text-2xl font-bold text-white mb-3">Astronomy Classes</h3>
-                <p className="text-sm sm:text-base text-white/70 leading-relaxed mb-4">
-                  Telescopic observations, celestial navigation, and understanding the cosmos
-                </p>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="border-[#ff6b35] text-[#ff6b35] hover:bg-[#ff6b35] hover:text-white w-full bg-transparent"
-                >
-                  Learn More
-                </Button>
-              </div>
-              <div className="bg-white/5 backdrop-blur-sm p-6 sm:p-8 rounded-xl border border-white/10 hover:border-[#ff6b35]/50 transition-all hover:shadow-xl hover:shadow-[#ff6b35]/10">
-                <Satellite className="w-10 h-10 sm:w-12 sm:h-12 text-[#ff6b35] mb-4" />
-                <h3 className="text-xl sm:text-2xl font-bold text-white mb-3">Satellite Programs</h3>
-                <p className="text-sm sm:text-base text-white/70 leading-relaxed mb-4">
-                  Learn to build, program, and launch your own miniature satellites
-                </p>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="border-[#ff6b35] text-[#ff6b35] hover:bg-[#ff6b35] hover:text-white w-full bg-transparent"
-                >
-                  Learn More
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Modal */}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="bg-black border border-white/20 text-white max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-[#ff6b35]">
+              Register for {selectedCourse?.title}
+            </DialogTitle>
+          </DialogHeader>
 
-      {/* Age Groups Section */}
-      <section className="py-12 sm:py-20 bg-gradient-to-b from-black to-[#ff6b35]/5">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#ff6b35] text-center mb-10 sm:mb-16">
-              Programs by Age Group
-            </h2>
-            <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
-              <div className="bg-gradient-to-br from-[#ff6b35]/20 to-transparent p-8 rounded-xl border-2 border-[#ff6b35]/30">
-                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">Ages 8-12</h3>
-                <p className="text-sm sm:text-base text-white/80 leading-relaxed mb-6">
-                  Introduction to space science, basic rocket principles, and astronomy fundamentals through fun and
-                  engaging activities
-                </p>
-                <Button className="bg-[#ff6b35] hover:bg-[#ff8555] text-white w-full font-semibold">Enroll Now</Button>
-              </div>
-              <div className="bg-gradient-to-br from-[#ff6b35]/20 to-transparent p-8 rounded-xl border-2 border-[#ff6b35]/30">
-                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">Ages 13-16</h3>
-                <p className="text-sm sm:text-base text-white/80 leading-relaxed mb-6">
-                  Advanced concepts in orbital mechanics, satellite technology, and hands-on engineering projects
-                </p>
-                <Button className="bg-[#ff6b35] hover:bg-[#ff8555] text-white w-full font-semibold">Enroll Now</Button>
-              </div>
-              <div className="bg-gradient-to-br from-[#ff6b35]/20 to-transparent p-8 rounded-xl border-2 border-[#ff6b35]/30">
-                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">Ages 17+</h3>
-                <p className="text-sm sm:text-base text-white/80 leading-relaxed mb-6">
-                  Professional-level training in aerospace engineering, mission design, and space technology research
-                </p>
-                <Button className="bg-[#ff6b35] hover:bg-[#ff8555] text-white w-full font-semibold">Enroll Now</Button>
-              </div>
+          <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+            <Input required placeholder="Student Name" />
+            <Input required placeholder="Age" />
+            <Input required type="email" placeholder="Parent Email" />
+            <Input required placeholder="Contact Number" />
+
+            <div className="text-sm text-white/70">
+              Payable Amount:{" "}
+              <span className="text-[#ff6b35] font-semibold">
+                ₹{selectedCourse?.amount}
+              </span>
             </div>
-          </div>
-        </div>
-      </section>
+
+            <Button
+              type="submit"
+              className="w-full bg-[#ff6b35] hover:bg-[#ff8555]"
+            >
+              Proceed to Payment
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       <Footer />
+    </div>
+  )
+}
+
+/* ---------- Course Card ---------- */
+
+function CourseCard({
+  image,
+  title,
+  price,
+  meta,
+  curriculum,
+  note,
+  onRegister,
+}: {
+  image: string
+  title: string
+  price: number
+  meta: string[]
+  curriculum: string[]
+  note?: string
+  onRegister: () => void
+}) {
+  return (
+    <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden flex flex-col">
+      <Image
+        src={image}
+        alt={title}
+        width={600}
+        height={350}
+        className="w-full h-48 object-cover"
+      />
+
+      <div className="p-6 flex flex-col flex-1">
+        <h3 className="text-2xl font-bold text-white">{title}</h3>
+
+        <ul className="text-sm text-white/70 mt-3 space-y-1">
+          {meta.map((m, i) => (
+            <li key={i}>• {m}</li>
+          ))}
+        </ul>
+
+        <h4 className="text-white font-semibold mt-4 mb-2">
+          Curriculum
+        </h4>
+        <ul className="text-sm text-white/80 space-y-1 list-disc list-inside">
+          {curriculum.map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+        </ul>
+
+        {note && (
+          <p className="text-xs text-[#ff6b35] mt-3">{note}</p>
+        )}
+
+        <div className="mt-auto">
+          <p className="text-sm text-white/70 mt-4">
+            Registration Fee: ₹{price}
+          </p>
+          <Button
+            onClick={onRegister}
+            className="mt-3 w-full bg-[#ff6b35] hover:bg-[#ff8555]"
+          >
+            Register Now
+          </Button>
+        </div>
+      </div>
     </div>
   )
 }

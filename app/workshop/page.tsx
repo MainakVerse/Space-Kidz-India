@@ -1,36 +1,37 @@
+"use client"
+
+import { useState } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { Calendar, MapPin, Users, Clock } from "lucide-react"
+import { Calendar, MapPin, Users, Clock, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 export default function WorkshopPage() {
+  const [open, setOpen] = useState(false)
+  const [selectedWorkshop, setSelectedWorkshop] = useState("")
+
   const workshops = [
     {
-      title: "Rocket Science Basics",
-      date: "March 15-17, 2024",
-      location: "Chennai, Tamil Nadu",
+      title: "3-Day Space Science Workshop",
+      date: "FOR VII – IX",
+      location: "School / Institution Premises",
       duration: "3 Days",
-      participants: "30 Students",
-      description: "Learn the fundamentals of rocket propulsion, aerodynamics, and launch your own model rockets",
-      image: "/students-building-model-rockets-workshop.jpg",
+      participants: "Limited Seats",
+      description:
+        "Space Kidz India’s 3-day immersive program designed to introduce students to Space Science.\n\nDay 1 – Astronomy\nDay 2 – Satellite Technology\nDay 3 – Rocket Science",
+      image: "/space-science-students-astronomy-workshop.jpg",
     },
     {
-      title: "Satellite Building Workshop",
-      date: "April 5-7, 2024",
-      location: "Bangalore, Karnataka",
-      duration: "3 Days",
-      participants: "25 Students",
-      description: "Design and build functional miniature satellites with real communication systems",
-      image: "/students-building-cube-satellite-technology.jpg",
-    },
-    {
-      title: "Space Mission Planning",
-      date: "May 20-22, 2024",
-      location: "Mumbai, Maharashtra",
-      duration: "3 Days",
-      participants: "35 Students",
-      description: "Plan complete space missions from concept to execution using professional tools",
-      image: "/students-planning-space-mission-computers.jpg",
+      title: "5-Day Advanced Space Science Workshop",
+      date: "FOR VIII – IX",
+      location: "School / Institution Premises",
+      duration: "5 Days",
+      participants: "Limited Seats",
+      description:
+        "An elaborate week-long workshop for deeper understanding.\n\nDay 1–2: Astronomy\nDay 3–4: Satellite Technology\nDay 5: Rocket Science",
+      image: "/students-satellite-rocket-science-workshop.jpg",
     },
   ]
 
@@ -38,105 +39,123 @@ export default function WorkshopPage() {
     <div className="min-h-screen bg-black">
       <Header />
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-16 sm:pt-40 sm:pb-20 bg-gradient-to-b from-black via-black/95 to-black">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="max-w-4xl mx-auto text-center space-y-4 sm:space-y-6">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#ff6b35] text-balance">
-              Workshops
-            </h1>
-            <p className="text-lg sm:text-xl md:text-2xl text-white/80 text-balance leading-relaxed">
-              Hands-on learning experiences that bring space science to life
-            </p>
-          </div>
-        </div>
+      {/* Hero */}
+      <section className="pt-32 pb-16 bg-black text-center">
+        <h1 className="text-5xl font-bold text-[#ff6b35]">Workshops</h1>
+        <p className="text-white/80 mt-4 text-xl">
+          Hands-on learning experiences that bring space science to life
+        </p>
       </section>
 
-      {/* Upcoming Workshops */}
-      <section className="py-12 sm:py-20 bg-black">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#ff6b35] text-center mb-10 sm:mb-16">
-              Upcoming Workshops
-            </h2>
-            <div className="space-y-8 sm:space-y-12">
-              {workshops.map((workshop, index) => (
-                <div
-                  key={index}
-                  className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 overflow-hidden hover:border-[#ff6b35]/50 transition-all hover:shadow-xl hover:shadow-[#ff6b35]/10"
-                >
-                  <div className="grid md:grid-cols-2 gap-0">
-                    <div className="relative h-64 md:h-auto">
-                      <img
-                        src={workshop.image || "/placeholder.svg"}
-                        alt={workshop.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="p-6 sm:p-8 flex flex-col justify-between">
-                      <div className="space-y-4">
-                        <h3 className="text-2xl sm:text-3xl font-bold text-white">{workshop.title}</h3>
-                        <p className="text-sm sm:text-base text-white/70 leading-relaxed">{workshop.description}</p>
-                        <div className="grid sm:grid-cols-2 gap-3 sm:gap-4 text-sm">
-                          <div className="flex items-center gap-2 text-white/80">
-                            <Calendar className="w-4 h-4 text-[#ff6b35]" />
-                            {workshop.date}
-                          </div>
-                          <div className="flex items-center gap-2 text-white/80">
-                            <MapPin className="w-4 h-4 text-[#ff6b35]" />
-                            {workshop.location}
-                          </div>
-                          <div className="flex items-center gap-2 text-white/80">
-                            <Clock className="w-4 h-4 text-[#ff6b35]" />
-                            {workshop.duration}
-                          </div>
-                          <div className="flex items-center gap-2 text-white/80">
-                            <Users className="w-4 h-4 text-[#ff6b35]" />
-                            {workshop.participants}
-                          </div>
-                        </div>
-                      </div>
-                      <Button className="bg-[#ff6b35] hover:bg-[#ff8555] text-white w-full mt-6 font-semibold">
-                        Register Now
-                      </Button>
-                    </div>
+      {/* Workshops */}
+      <section className="py-20">
+        <div className="container mx-auto max-w-6xl space-y-10">
+          {workshops.map((w, i) => (
+            <div
+              key={i}
+              className="bg-white/5 border border-white/10 rounded-xl overflow-hidden grid md:grid-cols-2"
+            >
+              <img
+                src={w.image}
+                alt={w.title}
+                className="w-full h-full object-cover"
+              />
+
+              <div className="p-8 space-y-5">
+                <h3 className="text-3xl font-bold text-white">{w.title}</h3>
+
+                <p className="text-white/70 whitespace-pre-line">
+                  {w.description}
+                </p>
+
+                <div className="grid sm:grid-cols-2 gap-4 text-sm text-white/80">
+                  <div className="flex gap-2">
+                    <Calendar className="w-4 h-4 text-[#ff6b35]" />
+                    {w.date}
+                  </div>
+                  <div className="flex gap-2">
+                    <MapPin className="w-4 h-4 text-[#ff6b35]" />
+                    {w.location}
+                  </div>
+                  <div className="flex gap-2">
+                    <Clock className="w-4 h-4 text-[#ff6b35]" />
+                    {w.duration}
+                  </div>
+                  <div className="flex gap-2">
+                    <Users className="w-4 h-4 text-[#ff6b35]" />
+                    {w.participants}
                   </div>
                 </div>
-              ))}
+
+                <Button
+                  onClick={() => {
+                    setSelectedWorkshop(w.title)
+                    setOpen(true)
+                  }}
+                  className="bg-[#ff6b35] hover:bg-[#ff8555] w-full"
+                >
+                  Register Now
+                </Button>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* Workshop Benefits */}
-      <section className="py-12 sm:py-20 bg-gradient-to-b from-black to-[#ff6b35]/5">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#ff6b35] text-center mb-10 sm:mb-16">
-              What You'll Gain
+      {/* MODAL */}
+      {open && (
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center px-4">
+          <div className="bg-[#0b0b0b] border border-white/10 rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto relative p-6">
+            <button
+              onClick={() => setOpen(false)}
+              className="absolute top-4 right-4 text-white/60 hover:text-white"
+            >
+              <X />
+            </button>
+
+            <h2 className="text-2xl font-bold text-[#ff6b35] mb-1">
+              Workshop Application
             </h2>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-              <div className="text-center space-y-3 sm:space-y-4 p-6 bg-gradient-to-br from-[#ff6b35]/10 to-transparent rounded-xl border border-[#ff6b35]/20">
-                <div className="text-4xl sm:text-5xl">🚀</div>
-                <h3 className="text-lg sm:text-xl font-bold text-white">Hands-On Experience</h3>
-                <p className="text-sm sm:text-base text-white/70">
-                  Build real rockets and satellites with expert guidance
-                </p>
+            <p className="text-white/70 mb-6">{selectedWorkshop}</p>
+
+            <form className="space-y-4">
+              <div>
+                <Label className="text-white">Student Name</Label>
+                <Input placeholder="Enter student name" />
               </div>
-              <div className="text-center space-y-3 sm:space-y-4 p-6 bg-gradient-to-br from-[#ff6b35]/10 to-transparent rounded-xl border border-[#ff6b35]/20">
-                <div className="text-4xl sm:text-5xl">📜</div>
-                <h3 className="text-lg sm:text-xl font-bold text-white">Certification</h3>
-                <p className="text-sm sm:text-base text-white/70">Receive official certificates upon completion</p>
+
+              <div>
+                <Label className="text-white">Class</Label>
+                <Input placeholder="Class / Grade" />
               </div>
-              <div className="text-center space-y-3 sm:space-y-4 p-6 bg-gradient-to-br from-[#ff6b35]/10 to-transparent rounded-xl border border-[#ff6b35]/20">
-                <div className="text-4xl sm:text-5xl">👥</div>
-                <h3 className="text-lg sm:text-xl font-bold text-white">Networking</h3>
-                <p className="text-sm sm:text-base text-white/70">Connect with like-minded space enthusiasts</p>
+
+              <div>
+                <Label className="text-white">School Name</Label>
+                <Input placeholder="School / Institution" />
               </div>
-            </div>
+
+              <div>
+                <Label className="text-white">Parent / Guardian Name</Label>
+                <Input placeholder="Parent name" />
+              </div>
+
+              <div>
+                <Label className="text-white">Contact Number</Label>
+                <Input placeholder="+91 XXXXX XXXXX" />
+              </div>
+
+              <div>
+                <Label className="text-white">Email</Label>
+                <Input placeholder="example@email.com" />
+              </div>
+
+              <Button className="w-full bg-[#ff6b35] hover:bg-[#ff8555] font-semibold">
+                Submit Application
+              </Button>
+            </form>
           </div>
         </div>
-      </section>
+      )}
 
       <Footer />
     </div>
