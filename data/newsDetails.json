@@ -1,0 +1,45 @@
+[
+  {
+    "id": 0,
+    "title": "Marking the Impact of Feminine Power in Space Science",
+    "image": "/satellite-launch-success-celebration.jpg",
+    "content": [
+      "Space Kidz India marks a historical milestone with the execution of ShakthiSat, the first satellite designed and built entirely by women ambassadors across the world. The mission boasts of onboarding and working with over 12000 women across the world, led by a team of very able ambassadors, co-ambassadors, tech-ambassadors and mentors throughout the globe.",
+
+      "The mission is undergoing final stages of launch preparations and is slated for launch in Q1 2026. ShakthiSat is a 1U CubeSat that will carry out Earth observation and data collection, focusing on environmental monitoring and disaster management. This satellite is a testament to the capabilities and contributions of women in space science.",
+
+      "This achievement reinforces Space Kidz India's vision of democratizing space education and inspiring the next generation of aerospace innovators. The organization continues to champion diversity and inclusion in STEM fields, fostering a supportive community for women in aerospace. The successful development of ShakthiSat is a significant step towards breaking barriers and encouraging more women to pursue careers in space science and technology."
+    ]
+  },
+  {
+  "id": 1,
+  "title": "AzaadiSat Mission: Empowering Government School Girls Through Space Education",
+  "image": "/students-space-workshop-learning.jpg",
+  "content": [
+    "AzaadiSat is a satellite mission envisioned to inspire government school children from economically weaker backgrounds by providing them with foundational knowledge of space science. The initiative enables students to design and build simple scientific experiments and launch them to the edge of space using balloon satellites or orbital satellite platforms.",
+
+    "This project was conceptualized as a tribute to the 75th anniversary of India’s Independence, celebrating Azaadi Ka Amrit Mahotsav by combining national pride with scientific empowerment.",
+
+    "Space Kidz India has designed basic yet impactful experiments that students can easily learn and assemble with the guidance of their school science teachers and continuous online mentorship from the Space Kidz India technical team.",
+
+    "From 75 government schools for girls across India, 10 female students from each school—primarily studying in classes 8 to 12—were selected for this mission. AzaadiSat stands as a first-of-its-kind space mission built entirely on an all-women concept, aligning with the United Nations’ theme of 'Women in Space' and promoting greater participation of girls in STEM fields.",
+
+    "NITI Aayog has partnered with Space Kidz India to extend this opportunity to government school girl children nationwide, while Hexaware is supporting the mission through project funding and sponsorship."
+  ]
+},
+ {
+  "id": 2,
+  "title": "Young Scientist India (YSI): Igniting Innovation in Young Minds",
+  "image": "/aerospace-partnership-handshake.jpg",
+  "content": [
+    "Young Scientist India (YSI) is a prestigious and transformative initiative designed to ignite the spirit of innovation and empower young minds to become the scientists and innovators of tomorrow.",
+
+    "Since its inception in 2013, YSI has been at the forefront of promoting scientific awareness among high school students by nurturing curiosity, critical thinking, and a deep interest in scientific exploration.",
+
+    "The program actively guides students toward meaningful and rewarding careers in science and technology, reinforcing the belief that every young mind holds the potential to create remarkable advancements and lasting societal impact.",
+
+    "With a strong emphasis on fostering an entrepreneurial mindset and encouraging out-of-the-box thinking, YSI provides a national platform for students to showcase their creativity, problem-solving abilities, and scientific acumen."
+  ]
+}
+
+]

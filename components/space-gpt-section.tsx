@@ -1,10 +1,10 @@
 "use client"
-import { Button } from "@/components/ui/button"
-import type React from "react"
 
+import { useState, useRef, useEffect } from "react"
+import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Send, Sparkles, Loader2 } from "lucide-react"
-import { useState, useRef, useEffect } from "react"
+import Link from "next/link"
 
 interface Message {
   id: string
@@ -18,12 +18,8 @@ export function SpaceGPTSection() {
   const [isLoading, setIsLoading] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
-
   useEffect(() => {
-    scrollToBottom()
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -36,66 +32,45 @@ export function SpaceGPTSection() {
       content: input.trim(),
     }
 
-    setMessages((prev) => [...prev, userMessage])
+    const updatedMessages = [...messages, userMessage]
+    setMessages(updatedMessages)
     setInput("")
     setIsLoading(true)
 
     try {
       const response = await fetch("/api/space-gpt", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          messages: [...messages, userMessage].map((m) => ({
-            role: m.role,
-            content: m.content,
-          })),
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: updatedMessages }),
       })
 
-      if (!response.ok) throw new Error("Failed to get response")
+      const data = await response.json()
+      console.log("Response:", response.status, data)
 
-      const reader = response.body?.getReader()
-      const decoder = new TextDecoder()
-      let assistantMessage = ""
-
-      const assistantMessageId = (Date.now() + 1).toString()
-      setMessages((prev) => [...prev, { id: assistantMessageId, role: "assistant", content: "" }])
-
-      if (reader) {
-        while (true) {
-          const { done, value } = await reader.read()
-          if (done) break
-
-          const chunk = decoder.decode(value)
-          const lines = chunk.split("\n")
-
-          for (const line of lines) {
-            if (line.startsWith("0:")) {
-              try {
-                const data = JSON.parse(line.slice(2))
-                if (data) {
-                  assistantMessage += data
-                  setMessages((prev) =>
-                    prev.map((m) => (m.id === assistantMessageId ? { ...m, content: assistantMessage } : m)),
-                  )
-                }
-              } catch (e) {
-                // Skip invalid JSON
-              }
-            }
-          }
-        }
+      if (!response.ok) {
+        throw new Error(data.details || data.error || "Unknown error")
       }
-    } catch (error) {
-      console.error("Error:", error)
+
+      if (!data.text) {
+        throw new Error("No text in response")
+      }
+
       setMessages((prev) => [
         ...prev,
         {
-          id: Date.now().toString(),
+          id: (Date.now() + 1).toString(),
           role: "assistant",
-          content: "Sorry, I encountered an error. Please try again.",
+          content: data.text,
+        },
+      ])
+    } catch (err: any) {
+      console.error("Error:", err.message)
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: (Date.now() + 1).toString(),
+          role: "assistant",
+          content: `⚠️ ${err.message}. Check your API key and try again.`,
         },
       ])
     } finally {
@@ -103,76 +78,110 @@ export function SpaceGPTSection() {
     }
   }
 
+  // Function to render message content with clickable links
+  const renderMessageContent = (content: string) => {
+    // Match markdown links: [text](url)
+    const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g
+    const parts = []
+    let lastIndex = 0
+    let match
+
+    while ((match = linkRegex.exec(content)) !== null) {
+      // Add text before the link
+      if (match.index > lastIndex) {
+        parts.push(content.substring(lastIndex, match.index))
+      }
+      
+      // Add the link
+      const linkText = match[1]
+      const linkUrl = match[2]
+      parts.push(
+        <Link 
+          key={match.index} 
+          href={linkUrl}
+          className="text-[#ff6b35] underline hover:text-[#ff8555] font-semibold"
+        >
+          {linkText}
+        </Link>
+      )
+      
+      lastIndex = match.index + match[0].length
+    }
+
+    // Add remaining text after the last link
+    if (lastIndex < content.length) {
+      parts.push(content.substring(lastIndex))
+    }
+
+    return parts.length > 0 ? parts : content
+  }
+
   return (
-    <section className="py-16 md:py-24 bg-zinc-950" id="space-gpt">
-      <div className="container mx-auto px-4 sm:px-6">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 mb-4">
-            <Sparkles className="text-[#ff6b35]" size={32} />
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#ff6b35]">Space GPT</h2>
-          </div>
-          <p className="text-base md:text-lg text-white/70 max-w-2xl mx-auto">
-            Ask me anything about space, astronomy, or space exploration!
+    <section className="py-16 bg-zinc-950" id="space-gpt">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-8">
+          <Sparkles className="mx-auto mb-3 text-[#ff6b35]" size={32} />
+          <h2 className="text-4xl font-bold text-[#ff6b35]">Space GPT</h2>
+          <p className="text-white/70 mt-2">
+            Ask me anything about space, astronomy, or exploration!
           </p>
         </div>
 
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-4 md:p-8">
-            <div className="mb-6 h-[400px] overflow-y-auto space-y-4 px-2">
-              {messages.length === 0 ? (
-                <div className="flex items-center justify-center h-full text-white/50 text-center">
-                  <div>
-                    <Sparkles className="mx-auto mb-4 text-[#ff6b35]" size={48} />
-                    <p className="text-lg">Ask me anything about space!</p>
-                    <p className="text-sm mt-2">Try: "What is a black hole?" or "Tell me about Mars missions"</p>
-                  </div>
-                </div>
-              ) : (
-                messages.map((message) => (
-                  <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
-                    <div
-                      className={`max-w-[80%] p-4 rounded-2xl ${
-                        message.role === "user" ? "bg-[#ff6b35] text-white" : "bg-white/10 text-white"
-                      }`}
-                    >
-                      <p className="leading-relaxed whitespace-pre-wrap">{message.content}</p>
-                    </div>
-                  </div>
-                ))
-              )}
-              {isLoading && (
-                <div className="flex justify-start">
-                  <div className="bg-white/10 p-4 rounded-2xl">
-                    <Loader2 className="animate-spin text-[#ff6b35]" size={24} />
-                  </div>
-                </div>
-              )}
-              <div ref={messagesEndRef} />
-            </div>
+        <div className="max-w-4xl mx-auto bg-white/5 rounded-2xl p-6">
+          <div className="h-[420px] overflow-y-auto space-y-4 mb-4">
+            {messages.length === 0 && (
+              <p className="text-center text-white/50 mt-20">
+                Try asking: "What is a black hole?"
+              </p>
+            )}
 
-            <form onSubmit={handleSubmit} className="flex gap-2 md:gap-4">
-              <Textarea
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask about space, stars, planets, missions..."
-                className="flex-1 bg-white/10 border-white/20 text-white placeholder:text-white/50 resize-none min-h-[60px] focus:border-[#ff6b35] focus:ring-[#ff6b35]"
-                disabled={isLoading}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault()
-                    handleSubmit(e)
-                  }
-                }}
-              />
-              <Button
-                type="submit"
-                disabled={isLoading || !input.trim()}
-                className="bg-[#ff6b35] hover:bg-[#ff8555] text-white px-6 md:px-8 self-end disabled:opacity-50"
+            {messages.map((m) => (
+              <div
+                key={m.id}
+                className={`max-w-[80%] ${
+                  m.role === "user"
+                    ? "ml-auto bg-[#ff6b35] text-white"
+                    : "mr-auto bg-white/10 text-white"
+                } rounded-xl p-4`}
               >
-                {isLoading ? <Loader2 className="animate-spin" size={20} /> : <Send size={20} />}
-              </Button>
-            </form>
+                <p className="whitespace-pre-wrap">
+                  {m.role === "assistant" ? renderMessageContent(m.content) : m.content}
+                </p>
+              </div>
+            ))}
+
+            {isLoading && (
+              <div className="bg-white/10 p-4 rounded-xl w-fit">
+                <Loader2 className="animate-spin text-[#ff6b35]" />
+              </div>
+            )}
+
+            <div ref={messagesEndRef} />
           </div>
+
+          <form onSubmit={handleSubmit} className="flex gap-3">
+            <Textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Ask about space, stars, planets, missions..."
+              className="flex-1 bg-white/10 text-white border-white/20"
+              disabled={isLoading}
+              rows={2}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault()
+                  handleSubmit(e)
+                }
+              }}
+            />
+            <Button
+              type="submit"
+              disabled={isLoading || !input.trim()}
+              className="bg-[#ff6b35] hover:bg-[#ff8555] disabled:opacity-50"
+            >
+              <Send size={18} />
+            </Button>
+          </form>
         </div>
       </div>
     </section>
