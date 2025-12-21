@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Send, Sparkles, Loader2 } from "lucide-react"
@@ -10,67 +10,85 @@ interface Message {
   id: string
   role: "user" | "assistant"
   content: string
+  isTyping?: boolean
 }
 
 export function SpaceGPTSection() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }, [messages])
+  /* ---------------- SAFE TYPEWRITER (NO TRUNCATION) ---------------- */
+  const typeWriter = (id: string, text: string) => {
+    let i = 0
 
+    const interval = setInterval(() => {
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === id ? { ...m, content: text.slice(0, i + 1) } : m
+        )
+      )
+
+      i++
+      if (i >= text.length) {
+        clearInterval(interval)
+        setMessages((prev) =>
+          prev.map((m) => (m.id === id ? { ...m, isTyping: false } : m))
+        )
+      }
+    }, 16)
+  }
+
+  /* ---------------- SUBMIT ---------------- */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!input.trim() || isLoading) return
 
     const userMessage: Message = {
-      id: Date.now().toString(),
+      id: crypto.randomUUID(),
       role: "user",
       content: input.trim(),
     }
 
-    const updatedMessages = [...messages, userMessage]
-    setMessages(updatedMessages)
+    setMessages((prev) => [...prev, userMessage])
     setInput("")
     setIsLoading(true)
 
     try {
-      const response = await fetch("/api/space-gpt", {
+      const res = await fetch("/api/space-gpt", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: updatedMessages }),
+        body: JSON.stringify({ messages: [...messages, userMessage] }),
       })
 
-      const data = await response.json()
-      console.log("Response:", response.status, data)
+      const data = await res.json()
 
-      if (!response.ok) {
-        throw new Error(data.details || data.error || "Unknown error")
+      if (!res.ok || typeof data.text !== "string" || !data.text.trim()) {
+        throw new Error("Invalid or empty response from AI")
       }
 
-      if (!data.text) {
-        throw new Error("No text in response")
-      }
+      const assistantId = crypto.randomUUID()
 
+      // Insert assistant message FIRST (never overwrite history)
       setMessages((prev) => [
         ...prev,
         {
-          id: (Date.now() + 1).toString(),
+          id: assistantId,
           role: "assistant",
-          content: data.text,
+          content: "",
+          isTyping: true,
         },
       ])
+
+      // Type AFTER full response exists
+      typeWriter(assistantId, data.text)
     } catch (err: any) {
-      console.error("Error:", err.message)
       setMessages((prev) => [
         ...prev,
         {
-          id: (Date.now() + 1).toString(),
+          id: crypto.randomUUID(),
           role: "assistant",
-          content: `⚠️ ${err.message}. Check your API key and try again.`,
+          content: `⚠️ ${err.message}`,
         },
       ])
     } finally {
@@ -78,42 +96,33 @@ export function SpaceGPTSection() {
     }
   }
 
-  // Function to render message content with clickable links
+  /* ---------------- LINK RENDERER ---------------- */
   const renderMessageContent = (content: string) => {
-    // Match markdown links: [text](url)
-    const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g
-    const parts = []
-    let lastIndex = 0
+    const regex = /\[([^\]]+)\]\(([^)]+)\)/g
+    const parts: any[] = []
+    let last = 0
     let match
 
-    while ((match = linkRegex.exec(content)) !== null) {
-      // Add text before the link
-      if (match.index > lastIndex) {
-        parts.push(content.substring(lastIndex, match.index))
+    while ((match = regex.exec(content))) {
+      if (match.index > last) {
+        parts.push(content.slice(last, match.index))
       }
-      
-      // Add the link
-      const linkText = match[1]
-      const linkUrl = match[2]
+
       parts.push(
-        <Link 
-          key={match.index} 
-          href={linkUrl}
+        <Link
+          key={match.index}
+          href={match[2]}
           className="text-[#ff6b35] underline hover:text-[#ff8555] font-semibold"
         >
-          {linkText}
+          {match[1]}
         </Link>
       )
-      
-      lastIndex = match.index + match[0].length
+
+      last = match.index + match[0].length
     }
 
-    // Add remaining text after the last link
-    if (lastIndex < content.length) {
-      parts.push(content.substring(lastIndex))
-    }
-
-    return parts.length > 0 ? parts : content
+    if (last < content.length) parts.push(content.slice(last))
+    return parts.length ? parts : content
   }
 
   return (
@@ -128,10 +137,11 @@ export function SpaceGPTSection() {
         </div>
 
         <div className="max-w-4xl mx-auto bg-white/5 rounded-2xl p-6">
-          <div className="h-[420px] overflow-y-auto space-y-4 mb-4">
+          {/* CHAT BODY */}
+          <div className="h-[420px] overflow-y-auto space-y-4 mb-4 pr-2">
             {messages.length === 0 && (
               <p className="text-center text-white/50 mt-20">
-                Try asking: "What is a black hole?"
+                Try asking: “What is a black hole?”
               </p>
             )}
 
@@ -140,12 +150,12 @@ export function SpaceGPTSection() {
                 key={m.id}
                 className={`max-w-[80%] ${
                   m.role === "user"
-                    ? "ml-auto bg-[#ff6b35] text-white"
-                    : "mr-auto bg-white/10 text-white"
-                } rounded-xl p-4`}
+                    ? "ml-auto bg-[#ff6b35]"
+                    : "mr-auto bg-white/10"
+                } rounded-xl p-4 text-white`}
               >
                 <p className="whitespace-pre-wrap">
-                  {m.role === "assistant" ? renderMessageContent(m.content) : m.content}
+                  {renderMessageContent(m.content)}
                 </p>
               </div>
             ))}
@@ -155,18 +165,17 @@ export function SpaceGPTSection() {
                 <Loader2 className="animate-spin text-[#ff6b35]" />
               </div>
             )}
-
-            <div ref={messagesEndRef} />
           </div>
 
+          {/* FIXED INPUT */}
           <form onSubmit={handleSubmit} className="flex gap-3">
             <Textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask about space, stars, planets, missions..."
-              className="flex-1 bg-white/10 text-white border-white/20"
-              disabled={isLoading}
               rows={2}
+              disabled={isLoading}
+              className="flex-1 resize-none bg-white/10 text-white border-white/20"
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault()
@@ -177,7 +186,7 @@ export function SpaceGPTSection() {
             <Button
               type="submit"
               disabled={isLoading || !input.trim()}
-              className="bg-[#ff6b35] hover:bg-[#ff8555] disabled:opacity-50"
+              className="bg-[#ff6b35] hover:bg-[#ff8555]"
             >
               <Send size={18} />
             </Button>
