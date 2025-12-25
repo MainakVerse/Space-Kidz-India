@@ -11,6 +11,8 @@ export default function PressReleasesPage() {
   const categories = ["All", ...Object.keys(pressData)]
   const [activeCategory, setActiveCategory] = useState("All")
 
+  const [filtersOpen, setFiltersOpen] = useState(false)
+
   const filteredData =
     activeCategory === "All"
       ? pressData
@@ -30,37 +32,56 @@ export default function PressReleasesPage() {
         </p>
       </section>
 
-      {/* Category Filters — GRID (8 per row) */}
-      <section className="sticky top-16 sm:top-20 z-30 bg-black/90 backdrop-blur border-y border-white/10">
-        <div className="container mx-auto px-4 sm:px-6 py-4">
-          <div
-            className="
-              grid gap-2
-              grid-cols-2
-              sm:grid-cols-3
-              md:grid-cols-4
-              lg:grid-cols-6
-              xl:grid-cols-8
-            "
+    {/* Category Filters with Collapser */}
+<section className="sticky top-16 sm:top-20 z-30 bg-black/90 backdrop-blur border-y border-white/10">
+  <div className="container mx-auto px-4 sm:px-6 py-4 space-y-3">
+
+    {/* Collapser Header */}
+    <div className="flex items-center justify-between">
+      <span className="text-sm text-white/70">
+        Filter by Category
+      </span>
+
+      <button
+        onClick={() => setFiltersOpen((v) => !v)}
+        className="text-xs sm:text-sm text-[#ff6b35] hover:underline"
+      >
+        {filtersOpen ? "Hide filters" : "Show filters"}
+      </button>
+    </div>
+
+    {/* Filters Grid */}
+    {filtersOpen && (
+      <div
+        className="
+          grid gap-2
+          grid-cols-2
+          sm:grid-cols-3
+          md:grid-cols-4
+          lg:grid-cols-6
+          xl:grid-cols-8
+        "
+      >
+        {categories.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setActiveCategory(cat)}
+            className={`px-3 py-2 rounded-full text-xs sm:text-sm font-medium transition
+              ${
+                activeCategory === cat
+                  ? "bg-[#ff6b35] text-white"
+                  : "bg-white/10 text-white/70 hover:bg-white/20"
+              }
+            `}
           >
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`px-3 py-2 rounded-full text-xs sm:text-sm font-medium transition
-                  ${
-                    activeCategory === cat
-                      ? "bg-[#ff6b35] text-white"
-                      : "bg-white/10 text-white/70 hover:bg-white/20"
-                  }
-                `}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
+            {cat}
+          </button>
+        ))}
+      </div>
+    )}
+  </div>
+</section>
+
 
       {/* Content */}
       <section className="py-10 sm:py-16">
