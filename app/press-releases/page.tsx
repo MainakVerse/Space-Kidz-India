@@ -1,7 +1,8 @@
 "use client"
 
+import type React from "react" // Added for type safety
 import { useState } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -86,6 +87,10 @@ export function ContactModal() {
       <DialogContent className="bg-black border-[#ff6b35]/30 text-white max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-[#ff6b35]">Get In Touch</DialogTitle>
+          {/* Added Description for Accessibility (Screen Readers) */}
+          <DialogDescription className="text-white/60">
+            Fill out the form below and we will get back to you as soon as possible.
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
