@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
@@ -10,6 +9,9 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 
 export function ContactModal() {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [open, setOpen] = useState(false) // To control modal closing
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,14 +20,45 @@ export function ContactModal() {
     message: "",
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("[v0] Contact form submitted:", formData)
-    // Handle form submission
+    setIsSubmitting(true)
+
+    try {
+      // 1. Send data to your API
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      // 2. Handle API errors
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to send message")
+      }
+
+      // 3. Success Success
+      console.log("✅ Message sent successfully:", data)
+      alert("Message sent successfully!")
+      
+      // Reset form and close modal
+      setFormData({ name: "", email: "", phone: "", organization: "", message: "" })
+      setOpen(false) 
+
+    } catch (error) {
+      console.error("❌ Submission Error:", error)
+      alert("Something went wrong. Please try again.")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           size="lg"
@@ -108,9 +141,10 @@ export function ContactModal() {
           </div>
           <Button
             type="submit"
-            className="w-full bg-[#ff6b35] hover:bg-[#ff8555] text-white font-semibold text-base py-6"
+            disabled={isSubmitting}
+            className="w-full bg-[#ff6b35] hover:bg-[#ff8555] text-white font-semibold text-base py-6 disabled:opacity-50"
           >
-            Send Message
+            {isSubmitting ? "Sending..." : "Send Message"}
           </Button>
         </form>
       </DialogContent>

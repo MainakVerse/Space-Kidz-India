@@ -3,12 +3,58 @@
 import { useState } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { Calendar, MapPin, Clock, Users, ArrowRight, X } from "lucide-react"
+import { Calendar, MapPin, Clock, Users, ArrowRight, X, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
 export default function EventsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Form State
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    organization: "",
+    country: "",
+  })
+
+  // Handle Input Changes
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
+  // Handle Submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    try {
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || "Registration failed")
+      }
+
+      // Success
+      alert("✅ Registration successful! See you at the event.")
+      setIsModalOpen(false)
+      setFormData({ fullName: "", email: "", phone: "", organization: "", country: "" })
+
+    } catch (error) {
+      console.error(error)
+      alert("Something went wrong. Please try again.")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   const upcomingEvents = [
     {
@@ -53,13 +99,6 @@ export default function EventsPage() {
         "Students designed, launched, and analyzed near-space balloon payloads.",
     },
   ]
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Handle form submission here
-    alert("Registration submitted!")
-    setIsModalOpen(false)
-  }
 
   return (
     <div className="min-h-screen bg-black">
@@ -231,7 +270,10 @@ export default function EventsPage() {
                 </label>
                 <input
                   type="text"
+                  name="fullName"
                   required
+                  value={formData.fullName}
+                  onChange={handleChange}
                   placeholder="Enter your full name"
                   className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder:text-white/40 focus:border-[#ff6b35] focus:outline-none transition"
                 />
@@ -243,7 +285,10 @@ export default function EventsPage() {
                 </label>
                 <input
                   type="email"
+                  name="email"
                   required
+                  value={formData.email}
+                  onChange={handleChange}
                   placeholder="your.email@example.com"
                   className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder:text-white/40 focus:border-[#ff6b35] focus:outline-none transition"
                 />
@@ -255,7 +300,10 @@ export default function EventsPage() {
                 </label>
                 <input
                   type="tel"
+                  name="phone"
                   required
+                  value={formData.phone}
+                  onChange={handleChange}
                   placeholder="+91 XXXXX XXXXX"
                   className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder:text-white/40 focus:border-[#ff6b35] focus:outline-none transition"
                 />
@@ -267,6 +315,9 @@ export default function EventsPage() {
                 </label>
                 <input
                   type="text"
+                  name="organization"
+                  value={formData.organization}
+                  onChange={handleChange}
                   placeholder="Enter your organization or school name"
                   className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder:text-white/40 focus:border-[#ff6b35] focus:outline-none transition"
                 />
@@ -278,6 +329,9 @@ export default function EventsPage() {
                 </label>
                 <input
                   type="text"
+                  name="country"
+                  value={formData.country}
+                  onChange={handleChange}
                   placeholder="Enter your country"
                   className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder:text-white/40 focus:border-[#ff6b35] focus:outline-none transition"
                 />
@@ -285,9 +339,17 @@ export default function EventsPage() {
 
               <Button
                 type="submit"
-                className="w-full bg-[#ff6b35] hover:bg-[#ff6b35]/90 text-white font-semibold py-2.5 mt-2"
+                disabled={isSubmitting}
+                className="w-full bg-[#ff6b35] hover:bg-[#ff6b35]/90 text-white font-semibold py-2.5 mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Submit Registration
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Registering...
+                  </>
+                ) : (
+                  "Submit Registration"
+                )}
               </Button>
             </form>
           </div>

@@ -2,12 +2,9 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Space_Grotesk } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
-import { Preloader } from "@/components/preloader"
-import { PageTransition } from "@/components/page-transition"
-import { ScrollToTop } from "@/components/scroll-to-top"
-import { ImageScrollEffects } from "@/components/image-scroll-effects"
 import "./globals.css"
 
+// Fonts are safe at root
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
@@ -31,21 +28,19 @@ export const metadata: Metadata = {
   },
 }
 
-
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
+}) {
   return (
     <html lang="en">
       <body className={`${spaceGrotesk.className} font-sans antialiased`}>
-        <Preloader />
-        <PageTransition />
-        <ScrollToTop />
-        <ImageScrollEffects />
-        <div className="orange-rays-gradient" />
+        {/* Core app content – ZERO side effects */}
         {children}
+
+        {/* Decorative / analytics layer – non-blocking */}
+        <div className="orange-rays-gradient pointer-events-none" />
         <Analytics />
       </body>
     </html>

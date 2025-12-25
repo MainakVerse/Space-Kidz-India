@@ -1,14 +1,15 @@
 "use client"
 
 import type React from "react"
-
+import { useState } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
-import { Mail, Phone, MapPin, Send, Users, Rocket, Lightbulb } from "lucide-react"
-import { useState } from "react"
+import { Mail, Phone, MapPin, Send, Users, Rocket, Lightbulb, Loader2 } from "lucide-react"
 
 export default function CollaboratePage() {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,18 +19,46 @@ export default function CollaboratePage() {
     message: "",
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Handle form submission
-    console.log("Form submitted:", formData)
-    alert("Thank you for your interest! We'll get back to you soon.")
-  }
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     })
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    try {
+      const response = await fetch("/api/collaborate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || "Submission failed")
+      }
+
+      // Success!
+      alert("Thank you! Your collaboration request has been sent.")
+      setFormData({
+        name: "",
+        email: "",
+        organization: "",
+        phone: "",
+        collaborationType: "",
+        message: "",
+      })
+    } catch (error) {
+      console.error(error)
+      alert("Something went wrong. Please try again later.")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -164,11 +193,11 @@ export default function CollaboratePage() {
                   className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:border-[#ff6b35] transition-colors text-white"
                 >
                   <option value="" className="bg-[#1f1f1f] text-gray-400">Select collaboration type</option>
-                  <option value="corporate" className="bg-[#1f1f1f] text-gray-400">Corporate Partnership</option>
-                  <option value="research" className="bg-[#1f1f1f] text-gray-400">Research Collaboration</option>
-                  <option value="education" className="bg-[#1f1f1f] text-gray-400">Educational Institution</option>
-                  <option value="sponsorship" className="bg-[#1f1f1f] text-gray-400">Sponsorship</option>
-                  <option value="other" className="bg-[#1f1f1f] text-gray-400">Other</option>
+                  <option value="corporate" className="bg-[#1f1f1f] text-white">Corporate Partnership</option>
+                  <option value="research" className="bg-[#1f1f1f] text-white">Research Collaboration</option>
+                  <option value="education" className="bg-[#1f1f1f] text-white">Educational Institution</option>
+                  <option value="sponsorship" className="bg-[#1f1f1f] text-white">Sponsorship</option>
+                  <option value="other" className="bg-[#1f1f1f] text-white">Other</option>
                 </select>
               </div>
 
@@ -190,10 +219,20 @@ export default function CollaboratePage() {
 
               <Button
                 type="submit"
-                className="w-full md:w-auto bg-[#ff6b35] hover:bg-[#ff8555] text-white font-semibold px-8 py-6 text-lg"
+                disabled={isSubmitting}
+                className="w-full md:w-auto bg-[#ff6b35] hover:bg-[#ff8555] text-white font-semibold px-8 py-6 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Send className="w-5 h-5 mr-2" />
-                Send Message
+                {isSubmitting ? (
+                   <>
+                     <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                     Sending...
+                   </>
+                ) : (
+                   <>
+                     <Send className="w-5 h-5 mr-2" />
+                     Send Message
+                   </>
+                )}
               </Button>
             </form>
           </div>
@@ -221,7 +260,7 @@ export default function CollaboratePage() {
               <Phone className="w-8 h-8 text-[#ff6b35] flex-shrink-0" />
               <div>
                 <h3 className="font-semibold mb-2">Phone</h3>
-                <a href="tel:+911234567890" className="text-white/70 hover:text-[#ff6b35] transition-colors">
+                <a href="tel:+918122412261" className="text-white/70 hover:text-[#ff6b35] transition-colors">
                   +91 81224 12261
                 </a>
               </div>

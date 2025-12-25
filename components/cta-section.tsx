@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { ContactModal } from "./contact-modal"
 
 export function CTASection() {
   return (
@@ -16,9 +16,9 @@ export function CTASection() {
           <p className="text-xl text-white/80 leading-relaxed">
             Join us in shaping the future of aerospace technology and space exploration
           </p>
-          <Button size="lg" className="bg-[#ff6b35] hover:bg-[#ff8555] text-white text-lg px-12 py-6 h-auto">
-            Get in Touch
-          </Button>
+          <ContactModal 
+            buttonClassName="bg-[#ff6b35] hover:bg-[#ff8555] text-white text-lg px-12 py-6 h-auto"
+          />
         </div>
       </div>
     </section>

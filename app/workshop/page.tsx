@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { Calendar, MapPin, Users, Clock, X } from "lucide-react"
+import { Calendar, MapPin, Users, Clock, X, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -11,6 +11,63 @@ import { Label } from "@/components/ui/label"
 export default function WorkshopPage() {
   const [open, setOpen] = useState(false)
   const [selectedWorkshop, setSelectedWorkshop] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Form State
+  const [formData, setFormData] = useState({
+    studentName: "",
+    studentClass: "",
+    schoolName: "",
+    parentName: "",
+    contactNumber: "",
+    email: "",
+  })
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    try {
+      const payload = {
+        workshopName: selectedWorkshop,
+        ...formData
+      }
+
+      const response = await fetch("/api/workshop-register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || "Registration failed")
+      }
+
+      // Success
+      alert(`✅ Application submitted successfully for ${selectedWorkshop}!`)
+      setOpen(false)
+      setFormData({
+        studentName: "",
+        studentClass: "",
+        schoolName: "",
+        parentName: "",
+        contactNumber: "",
+        email: "",
+      })
+
+    } catch (error) {
+      console.error(error)
+      alert("Something went wrong. Please try again.")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   const workshops = [
     {
@@ -118,39 +175,90 @@ export default function WorkshopPage() {
             </h2>
             <p className="text-white/70 mb-6">{selectedWorkshop}</p>
 
-            <form className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <Label className="text-white">Student Name</Label>
-                <Input placeholder="Enter student name" />
+                <Label className="text-white">Student Name *</Label>
+                <Input
+                  name="studentName"
+                  required
+                  value={formData.studentName}
+                  onChange={handleChange}
+                  placeholder="Enter student name"
+                  className="bg-white/5 border-white/20 text-white"
+                />
               </div>
 
               <div>
                 <Label className="text-white">Class</Label>
-                <Input placeholder="Class / Grade" />
+                <Input
+                  name="studentClass"
+                  value={formData.studentClass}
+                  onChange={handleChange}
+                  placeholder="Class / Grade"
+                  className="bg-white/5 border-white/20 text-white"
+                />
               </div>
 
               <div>
                 <Label className="text-white">School Name</Label>
-                <Input placeholder="School / Institution" />
+                <Input
+                  name="schoolName"
+                  value={formData.schoolName}
+                  onChange={handleChange}
+                  placeholder="School / Institution"
+                  className="bg-white/5 border-white/20 text-white"
+                />
               </div>
 
               <div>
                 <Label className="text-white">Parent / Guardian Name</Label>
-                <Input placeholder="Parent name" />
+                <Input
+                  name="parentName"
+                  value={formData.parentName}
+                  onChange={handleChange}
+                  placeholder="Parent name"
+                  className="bg-white/5 border-white/20 text-white"
+                />
               </div>
 
               <div>
-                <Label className="text-white">Contact Number</Label>
-                <Input placeholder="+91 XXXXX XXXXX" />
+                <Label className="text-white">Contact Number *</Label>
+                <Input
+                  name="contactNumber"
+                  required
+                  value={formData.contactNumber}
+                  onChange={handleChange}
+                  placeholder="+91 XXXXX XXXXX"
+                  className="bg-white/5 border-white/20 text-white"
+                />
               </div>
 
               <div>
-                <Label className="text-white">Email</Label>
-                <Input placeholder="example@email.com" />
+                <Label className="text-white">Email *</Label>
+                <Input
+                  name="email"
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="example@email.com"
+                  className="bg-white/5 border-white/20 text-white"
+                />
               </div>
 
-              <Button className="w-full bg-[#ff6b35] hover:bg-[#ff8555] font-semibold">
-                Submit Application
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-[#ff6b35] hover:bg-[#ff8555] font-semibold disabled:opacity-50"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  "Submit Application"
+                )}
               </Button>
             </form>
           </div>
