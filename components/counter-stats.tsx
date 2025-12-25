@@ -32,7 +32,7 @@ export default function AchievementsSection() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           <StatCard target={15} suffix="+" label="Finished Projects" isVisible={isVisible} />
           <StatCard target={100} suffix="M+" label="Students Trained" isVisible={isVisible} />
-          <StatCard target={25} suffix="+" label="Team Members" isVisible={isVisible} />
+          <StatCard target={12} suffix="+" label="Team Members" isVisible={isVisible} />
           <StatCard target={1000} suffix="+" label="Honorable Awards" isVisible={isVisible} />
         </div>
       </div>

@@ -11,28 +11,26 @@ import "./globals.css"
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Space Kidz India - Pioneering Aerospace Innovation",
+  title: "Space Kidz India - Aerospace Innovation",
   description:
     "Leading aerospace research and education organization empowering the next generation of space scientists and engineers",
   generator: "v0.app",
   icons: {
     icon: [
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-48x48.png", sizes: "48x48", type: "image/png" },
+    ],
+    apple: [
       {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.svg",
-        type: "image/svg+xml",
+        url: "/apple-touch-icon.png",
+        sizes: "180x180",
+        type: "image/png",
       },
     ],
-    apple: "/apple-icon.png",
   },
 }
+
 
 export default function RootLayout({
   children,

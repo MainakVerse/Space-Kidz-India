@@ -134,8 +134,8 @@ export default function TermsConditionsPage() {
                 <p className="mb-2">
                   <strong>Space Kidz India</strong>
                 </p>
-                <p className="mb-2">Email: info@spacekidzindia.com</p>
-                <p className="mb-2">Phone: +91 12345 67890</p>
+                <p className="mb-2">Email: support@spacekidzindia.com</p>
+                <p className="mb-2">Phone: +91 81224 12261</p>
                 <p>Location: Chennai, Tamil Nadu, India</p>
               </div>
             </section>

@@ -163,12 +163,12 @@ export default function CollaboratePage() {
                   onChange={handleChange}
                   className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:border-[#ff6b35] transition-colors text-white"
                 >
-                  <option value="">Select collaboration type</option>
-                  <option value="corporate">Corporate Partnership</option>
-                  <option value="research">Research Collaboration</option>
-                  <option value="education">Educational Institution</option>
-                  <option value="sponsorship">Sponsorship</option>
-                  <option value="other">Other</option>
+                  <option value="" className="bg-[#1f1f1f] text-gray-400">Select collaboration type</option>
+                  <option value="corporate" className="bg-[#1f1f1f] text-gray-400">Corporate Partnership</option>
+                  <option value="research" className="bg-[#1f1f1f] text-gray-400">Research Collaboration</option>
+                  <option value="education" className="bg-[#1f1f1f] text-gray-400">Educational Institution</option>
+                  <option value="sponsorship" className="bg-[#1f1f1f] text-gray-400">Sponsorship</option>
+                  <option value="other" className="bg-[#1f1f1f] text-gray-400">Other</option>
                 </select>
               </div>
 
@@ -210,10 +210,10 @@ export default function CollaboratePage() {
               <div>
                 <h3 className="font-semibold mb-2">Email</h3>
                 <a
-                  href="mailto:info@spacekidzindia.com"
+                  href="mailto:support@spacekidzindia.com"
                   className="text-white/70 hover:text-[#ff6b35] transition-colors"
                 >
-                  info@spacekidzindia.com
+                  support@spacekidzindia.com
                 </a>
               </div>
             </div>
@@ -222,7 +222,7 @@ export default function CollaboratePage() {
               <div>
                 <h3 className="font-semibold mb-2">Phone</h3>
                 <a href="tel:+911234567890" className="text-white/70 hover:text-[#ff6b35] transition-colors">
-                  +91 12345 67890
+                  +91 81224 12261
                 </a>
               </div>
             </div>

@@ -185,7 +185,7 @@ export default function PrivacyPolicyPage() {
                   <strong>Space Kidz India - Privacy Officer</strong>
                 </p>
                 <p className="mb-2">Email: privacy@spacekidzindia.com</p>
-                <p className="mb-2">Phone: +91 12345 67890</p>
+                <p className="mb-2">Phone: +91 81224 12261</p>
                 <p>Location: Chennai, Tamil Nadu, India</p>
               </div>
             </section>

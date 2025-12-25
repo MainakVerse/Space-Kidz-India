@@ -1,16 +1,21 @@
 import Link from "next/link"
+import Image from "next/image"
 
 export function Footer() {
   return (
     <footer className="bg-black text-white py-12">
       <div className="container mx-auto px-6">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
-          <div>
-            <div className="text-2xl font-bold mb-4">
-              <span className="text-[#ff6b35]">Space</span>
-              <span className="text-white"> Kidz</span>
-              <span className="text-[#22c55e]"> India</span>
-            </div>
+          <div className="mb-4">
+            <Image
+              src="/brand.jpg"
+              alt="Space Kidz India Logo"
+              width={220}
+              height={60}
+              priority
+              className="object-contain"
+            />
+          
             <p className="text-white/60 text-sm leading-relaxed">
               Empowering the next generation of space explorers through innovation and education
             </p>
@@ -61,10 +66,10 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               <li>
                 <a
-                  href="mailto:info@spacekidzindia.com"
+                  href="mailto:support@spacekidzindia.com"
                   className="text-white/60 hover:text-[#ff6b35] transition-colors"
                 >
-                  info@spacekidzindia.com
+                  support@spacekidzindia.com
                 </a>
               </li>
               <li>

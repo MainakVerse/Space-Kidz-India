@@ -30,13 +30,13 @@ export function Header() {
       <div className="container mx-auto px-4 sm:px-6 py-3 sm:py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-[#ff6b35] to-[#ff8555] flex items-center justify-center shadow-lg shadow-[#ff6b35]/30 overflow-hidden">
-              <img
-                src="/space-kidz-india-logo-with-rocket-and-stars.jpg"
-                alt="Space Kidz India Logo"
-                className="w-full h-full object-cover"
-              />
-            </div>
+            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center shadow-lg shadow-[#ff6b35]/30 overflow-hidden bg-black/10">
+  <img
+    src="/brand.jpg"
+    alt="Space Kidz India Logo"
+    className="w-full h-full object-contain p-1"
+  />
+</div>
           </Link>
 
           <nav className="hidden lg:flex items-center gap-4 xl:gap-6">
@@ -48,7 +48,7 @@ export function Header() {
             >
               About
             </Link>
-            <Link
+            {/* <Link
               href="/space-education"
               className={`text-sm xl:text-base font-medium transition-colors ${
                 isActive("/space-education")
@@ -57,7 +57,7 @@ export function Header() {
               }`}
             >
               Space Education
-            </Link>
+            </Link> */}
             <Link
               href="/workshop"
               className={`text-sm xl:text-base font-medium transition-colors ${
