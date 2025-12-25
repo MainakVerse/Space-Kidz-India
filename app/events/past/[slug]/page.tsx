@@ -47,7 +47,7 @@ const EVENTS_MAP = {
     location: "Sriharikota Launch Center",
     banner: "/international-satellite-workshop-participants.jpg",
     description:
-      "A historic student-built satellite launch that marked a milestone in student-driven space missions. AzaadiSAT carried experiments designed by 18,000 students from across 108 schools, celebrating India's spirit of innovation and independence.",
+      "“AzaadiSat” is a satellite mission with the ambitious vision to encourage government school children (from economically weak backgrounds) by providing them with a basic understanding and knowledge of space and tutoring them to build a small experiment and launch it to the edge of space through a “balloon satellite” or an “orbital satellite.” The significance of this project is that it has been conceptualized to pay our tribute to mark the 75th anniversary of Independence – Azaadi Ka Amrit Mahotsav. From 75 government schools for girls across India, we have selected 10 female students from each school to give this opportunity. The selected students are predominantly from classes 8th–12th. This is the first-of-its-kind space mission with an ‘all-women concept’ to promote women in STEM, as this year’s UN theme is “Women in Space.”",
     highlights: [
       "Student-designed experiments successfully deployed",
       "Participation from 108 schools nationwide",
