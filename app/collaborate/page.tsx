@@ -269,7 +269,13 @@ export default function CollaboratePage() {
               <MapPin className="w-8 h-8 text-[#ff6b35] flex-shrink-0" />
               <div>
                 <h3 className="font-semibold mb-2">Location</h3>
-                <p className="text-white/70">Chennai, Tamil Nadu, India</p>
+                Shambala Facility, Ispahani Centre,
+                    <br />
+                    123–124, Nungambakkam High Rd,
+                    <br />
+                    Thousand Lights West,
+                    <br />
+                    Chennai, Tamil Nadu 600034
               </div>
             </div>
           </div>
