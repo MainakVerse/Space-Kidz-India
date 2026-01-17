@@ -59,7 +59,7 @@ export default function EventsPage() {
   const upcomingEvents = [
     {
       title: "Mission ShakthiSAT",
-      date: "March 25, 2026",
+      date: "October 11, 2026",
       time: "10:00 AM - 6:00 PM",
       location: "Sriharikota Launch Center",
       attendees: "200000+ Expected",
