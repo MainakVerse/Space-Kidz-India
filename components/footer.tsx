@@ -81,7 +81,7 @@ export function Footer() {
                 <div className="flex gap-3">
                   <MapPin className="w-4 h-4 text-[#ff6b35] mt-1 shrink-0" />
                   <address className="not-italic text-white/60 leading-relaxed">
-                    Shambala Facility, Ispahani Centre,
+                    Shambala, Ispahani Centre,
                     <br />
                     123–124, Nungambakkam High Rd,
                     <br />
@@ -98,7 +98,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/50">
           <p>
-            © {new Date().getFullYear()} Space Kidz India. All rights reserved.
+            © {new Date().getFullYear()} © 2026 Space Kidz India. All rights reserved.
           </p>
 
           <div className="flex gap-6">
