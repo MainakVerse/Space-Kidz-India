@@ -98,7 +98,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/50">
           <p>
-            © {new Date().getFullYear()} Space Kidz India. All rights reserved.
+            © {new Date().getFullYear()} Space Kidz India. All rights reserved. Built by Mainak Chaudhuri.
           </p>
 
           <div className="flex gap-6">
